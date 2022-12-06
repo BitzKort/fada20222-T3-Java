@@ -24,6 +24,10 @@ public class ArbolRojinegro {
     @Setter
     private boolean black; //Si es negro True, en otro caso rojo
 
+    @Getter
+    @Setter
+    private ArbolRojinegro father;
+
     public ArbolRojinegro(ArbolRojinegro izq,
                           ArbolRojinegro der,
                           int valor,
@@ -43,37 +47,268 @@ public class ArbolRojinegro {
      * Metodos a implementar
      */
 
-    public void insertar(int x) throws Exception {
-        throw new OperationNotSupportedException();
+  //  public void insertFixUp (int x) {
+
+
+
+
+
+
+
+    //}
+
+    public void insert(int value) throws OperationNotSupportedException {
+        System.out.println("el valor apenas entrar es" + this.valor);
+
+        if (this.getFather() == null && this.valor == 0) {
+
+            this.setValor(value);
+            this.black = true;
+
+        }else {
+
+            if (value >= this.valor) {
+                if (this.der == null) {
+                    this.der = new ArbolRojinegro(null, null, value, false);
+                    this.der.setFather(this);
+              //      insertFixUp(value);
+
+
+                } else {
+                    this.der.insert(value);
+                }
+            } else {
+                if (this.izq == null) {
+                    this.izq = new ArbolRojinegro(null, null, value, false);
+                    this.izq.setFather(this);
+              //      insertFixUp(value);
+                } else {
+                    this.izq.insert(value);
+                }
+            }
+        }
+
     }
 
+
+
+    public void insertar(int x) throws Exception {
+
+        insert(x);
+
+    }
+
+
     public int maximo() throws Exception {
-        throw new OperationNotSupportedException();
+
+        if (this.getDer() != null) {
+            return this.getDer().maximo();
+        } else {
+            return this.valor;
+        }
     }
 
     public int minimo() throws Exception {
-        throw new OperationNotSupportedException();
+        if (this.getIzq() != null){
+            return this.getIzq().minimo();
+        } else {
+            return this.valor;
+        }
     }
 
-    public ArbolRojinegro search(int x) throws Exception {
-        throw new OperationNotSupportedException();
+    public ArbolRojinegro search(int x) {
+        if (this.valor == x) {
+            System.out.println("valor de retorno" + this.valor);
+            return this;
+        } else {
+            if (x >= this.valor) {
+                System.out.println(this.valor);
+                if (this.getDer() != null) {
+                    return this.getDer().search(x);
+                } else {
+                    System.out.println(this.getValor());
+                    return null;
+                }
+            } else {
+                if (this.getIzq() != null) {
+                    System.out.println("etnro a izquierda de verdad");
+                    return this.getIzq().search(x);
+                } else {
+                    System.out.println("entro a iziquierda null" + this.getValor());
+                    return  null;
+                }
+            }
+        }
     }
 
-    public void rotacionIzquierda(int x) throws Exception {
-        throw new OperationNotSupportedException();
+    public void rotacionIzquierda(int x) {
+
+
+        ArbolRojinegro nodoActual = search(x);
+        //   ArbolRojinegro nodoCambio = search(x);
+        ArbolRojinegro y = nodoActual.getDer();
+        ArbolRojinegro nuevo = new ArbolRojinegro();
+
+
+        if(nodoActual.getFather() != null) {
+
+            ArbolRojinegro abuelo = nodoActual.getFather();
+
+
+            if (y != null) {
+
+                if (abuelo.getIzq() == nodoActual) {
+
+
+                    y.setFather(abuelo);
+                    nodoActual.setFather(y);
+                    nodoActual.setDer(y.getIzq());
+                    y.setIzq(nodoActual);
+                    abuelo.setIzq(y);
+
+
+                } else {
+
+                    if (abuelo.getDer() == nodoActual) {
+
+
+                        y.setFather(abuelo);
+                        nodoActual.setFather(y);
+                        nodoActual.setDer(y.getIzq());
+                        y.setIzq(nodoActual);
+                        abuelo.setDer(y);
+
+                    }
+
+                }
+
+
+            }
+
+        }else{
+
+            if(y != null) {
+
+
+
+                //    nuevo.setValor();
+
+                System.out.println("entra a nulo rotacion izquierda");
+
+                // nodoCambio.setValor(y.getValor());
+
+
+                ArbolRojinegro nodoCopia = new ArbolRojinegro(nodoActual.getIzq(), nodoActual.getDer(), nodoActual.getValor(), nodoActual.isBlack());
+                nuevo.setValor(y.getValor());
+                nuevo.setDer(y.getDer());
+                nodoCopia.getDer().setFather(null);
+                nodoCopia.setFather(nodoCopia.getDer());
+                nodoCopia.setDer(y.getIzq());
+                nuevo.setIzq(nodoCopia);
+                nuevo.getIzq().getDer().setFather(nuevo.getIzq());
+
+                System.out.println("ARBOL NUEVO CON VALORES: "+nuevo.bfs());
+
+                nodoActual.setFather(nuevo.getFather());
+                nodoActual.setValor(nuevo.getValor());
+                nodoActual.setDer(nuevo.getDer());
+                nodoActual.setIzq(nodoCopia);
+
+
+            }
+
+
+
+
+
+        }
     }
 
-    public void rotacionDerecha(int x) throws  Exception {
-        throw new OperationNotSupportedException();
-    }
+    public void rotacionDerecha(int x) {
 
-    /*
-     *  Area de pruebas, no modificar.
-     */
-    //Verificaciones
-    /*
-     * Busqueda por amplitud para verificar arbol.
-     */
+        ArbolRojinegro nodoActual = search(x);
+        //   ArbolRojinegro nodoCambio = search(x);
+        ArbolRojinegro y = nodoActual.getIzq();
+        ArbolRojinegro nuevo = new ArbolRojinegro();
+
+
+        if(nodoActual.getFather() != null) {
+
+            ArbolRojinegro abuelo = nodoActual.getFather();
+
+
+            if (y != null) {
+
+                if (abuelo.getIzq() == nodoActual) {
+
+
+                    y.setFather(abuelo);
+                    nodoActual.setFather(y);
+                    nodoActual.setIzq(y.getDer());
+                    y.setDer(nodoActual);
+                    abuelo.setIzq(y);
+
+
+                } else {
+
+                    if (abuelo.getDer() == nodoActual) {
+
+
+                        y.setFather(abuelo);
+                        nodoActual.setFather(y);
+                        nodoActual.setIzq(y.getDer());
+                        y.setDer(nodoActual);
+                        abuelo.setDer(y);
+
+                    }
+
+                }
+
+
+            }
+
+        }else{
+
+            if(y != null) {
+
+
+
+                //    nuevo.setValor();
+
+                System.out.println("entra a nulo rotacion izquierda");
+
+                // nodoCambio.setValor(y.getValor());
+
+
+                ArbolRojinegro nodoCopia = new ArbolRojinegro(nodoActual.getIzq(), nodoActual.getDer(), nodoActual.getValor(), nodoActual.isBlack());
+                nuevo.setValor(y.getValor());
+                nuevo.setIzq(y.getIzq());
+                nodoCopia.getIzq().setFather(null);
+                nodoCopia.setFather(nodoCopia.getIzq());
+                nodoCopia.setIzq(y.getDer());
+                nuevo.setDer(nodoCopia);
+                nuevo.getDer().getIzq().setFather(nuevo.getDer());
+
+                System.out.println("ARBOL NUEVO CON VALORES: "+nuevo.bfs());
+
+                nodoActual.setFather(nuevo.getFather());
+                nodoActual.setValor(nuevo.getValor());
+                nodoActual.setIzq(nuevo.getIzq());
+                nodoActual.setDer(nodoCopia);
+
+
+
+            }
+
+
+
+
+
+        }
+
+
+
+    }
     public String bfs() {
         String salida = "";
         String separador = "";
@@ -81,6 +316,7 @@ public class ArbolRojinegro {
         cola.add(this);
         while (cola.size() > 0) {
             ArbolRojinegro nodo = cola.poll();
+            //   System.out.println("el valor del nodo es: "+ nodo.getValor());
             salida += separador + String.valueOf(nodo.getValor());
             separador = " ";
             if (nodo.getIzq() != null) {
