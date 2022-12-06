@@ -47,7 +47,47 @@ public class ArbolRojinegro {
      * Metodos a implementar
      */
 
-  //  public void insertFixUp (int x) {
+    public void insertFixUp (int x) {
+
+
+         ArbolRojinegro nodoActual = search(x);
+
+
+         while (nodoActual.getFather().isBlack() ==false) {
+
+             if (nodoActual.getFather() == null) {
+
+                 nodoActual.setBlack(true);
+
+
+             }else {
+
+                 if (nodoActual.getFather().getFather() != null) {  //si el abuelo NO es nulo
+
+                     if (nodoActual.getFather() == nodoActual.getFather().getFather().getIzq()) { //si el papa es hijo izuqierdo
+
+                        ArbolRojinegro y = nodoActual.getFather().getFather().getDer();
+
+                        if(y.isBlack() == false){ //si el tio es rojo CASO 1
+
+                            y.setBlack(true);
+
+                            nodoActual.getFather().setBlack(true);
+
+                            nodoActual.getFather().getFather().setBlack(false);
+
+                            nodoActual = nodoActual.getFather();
+                        } else {  //si el tio es NEGRO CASO 2 Y 3
+                            //por el if anterior yo se que en este punto mi papa es hijo izquierdo de mi abuelo
+                            if(nodoActual == nodoActual.getFather().getIzq()){ //si soy el hijo izquierdo de mi papa
+
+                                //entra en el caso 3 LINEAS IZQUIERDAS
+
+                                this.rotacionDerecha(nodoActual.getFather().getFather().getValor());
+
+                                nodoActual = nodoActual.getFather().getFather();
+
+                            }
 
 
 
@@ -55,7 +95,112 @@ public class ArbolRojinegro {
 
 
 
-    //}
+
+                        }
+
+
+
+                     }
+
+
+
+
+                 }
+
+
+
+
+
+             }
+
+
+         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+        ArbolRojinegro z = search(x);
+
+
+        while (z.getFather().isBlack() == false) {
+
+            if (z.getFather() == z.getFather().getFather().getIzq()) {
+
+                ArbolRojinegro y = z.getFather().getFather().getDer();
+
+                if( y != null) {
+
+                    if (y.isBlack() == false) {
+
+                        z.getFather().setBlack(true);
+                        y.setBlack(true);
+                        z.getFather().getFather().setBlack(false);
+                        z = z.getFather().getFather();
+
+                    } else {
+
+                        if (z == z.getFather().getDer()) {
+                            z = z.getFather();
+                            z.rotacionIzquierda(z.getValor()); //si falla camnbiar z por this
+
+                        }
+                        z.getFather().setBlack(true);
+                        z.getFather().getFather().setBlack(false);
+                        z.rotacionDerecha(z.getFather().getFather().getValor());//si falla camnbiar z por this
+
+                    }
+                }
+
+            }else {
+
+                ArbolRojinegro y = z.getFather().getFather().getIzq();
+
+                if( y != null) {
+
+                    if (y.isBlack() == false) {
+
+                        z.getFather().setBlack(true);
+                        y.setBlack(true);
+                        z.getFather().getFather().setBlack(false);
+                        z = z.getFather().getFather();
+
+                    } else {
+
+                        if (z == z.getFather().getIzq()) {
+                            z = z.getFather();
+                            z.rotacionDerecha(z.getValor()); //si falla camnbiar z por this
+
+                        }
+                        z.getFather().setBlack(true);
+                        z.getFather().getFather().setBlack(false);
+                        z.rotacionIzquierda(z.getFather().getFather().getValor());//si falla camnbiar z por this
+
+                    }
+                }
+            }
+        }
+
+        this.setBlack(true);
+*/
+
+
+    }
 
     public void insert(int value) throws OperationNotSupportedException {
         System.out.println("el valor apenas entrar es" + this.valor);
@@ -71,7 +216,7 @@ public class ArbolRojinegro {
                 if (this.der == null) {
                     this.der = new ArbolRojinegro(null, null, value, false);
                     this.der.setFather(this);
-              //      insertFixUp(value);
+                  //  insertFixUp(value);
 
 
                 } else {
@@ -81,7 +226,7 @@ public class ArbolRojinegro {
                 if (this.izq == null) {
                     this.izq = new ArbolRojinegro(null, null, value, false);
                     this.izq.setFather(this);
-              //      insertFixUp(value);
+               //     insertFixUp(value);
                 } else {
                     this.izq.insert(value);
                 }
