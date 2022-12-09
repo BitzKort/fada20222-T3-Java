@@ -47,7 +47,7 @@ public class ArbolRojinegro {
      * Metodos a implementar
      */
 
-    public void insertFixUp (int x) {
+  /*  public void insertFixUp (int x) {
 
 
          ArbolRojinegro nodoActual = search(x);
@@ -132,9 +132,8 @@ public class ArbolRojinegro {
 
 
 
+//otro posible metodo
 
-
-/*
         ArbolRojinegro z = search(x);
 
 
@@ -197,12 +196,14 @@ public class ArbolRojinegro {
         }
 
         this.setBlack(true);
-*/
+
 
 
     }
 
-    public void insert(int value) throws OperationNotSupportedException {
+    */
+
+    public void insert(int value) {
         System.out.println("el valor apenas entrar es" + this.valor);
 
         if (this.getFather() == null && this.valor == 0) {
@@ -237,14 +238,14 @@ public class ArbolRojinegro {
 
 
 
-    public void insertar(int x) throws Exception {
+    public void insertar(int x)  {
 
         insert(x);
 
     }
 
 
-    public int maximo() throws Exception {
+    public int maximo()  {
 
         if (this.getDer() != null) {
             return this.getDer().maximo();
@@ -253,7 +254,7 @@ public class ArbolRojinegro {
         }
     }
 
-    public int minimo() throws Exception {
+    public int minimo()  {
         if (this.getIzq() != null){
             return this.getIzq().minimo();
         } else {
@@ -473,6 +474,7 @@ public class ArbolRojinegro {
         }
         return salida;
     }
+
 
     /*
      * Recorrido inorder.
